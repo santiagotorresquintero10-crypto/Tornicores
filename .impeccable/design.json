@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-24T00:00:00Z",
+  "title": "Design System: TORNIRACORES 2",
+  "extensions": {
+    "colorMeta": {
+      "industrial-yellow": { "role": "primary", "displayName": "Industrial Yellow", "canonical": "#FFB900", "tonalRamp": ["#3d2c00", "#5c4300", "#8a6500", "#b88700", "#e5a400", "#ffb900", "#ffd25c", "#fff0c2"] },
+      "shop-black": { "role": "neutral", "displayName": "Shop Black", "canonical": "#08090B", "tonalRamp": ["#08090b", "#15171a", "#1c1f23", "#262a30", "#3a3f47", "#5d636b", "#9ca3af", "#e5e7eb"] },
+      "graphite": { "role": "neutral", "displayName": "Graphite", "canonical": "#1C1F23" },
+      "graphite-low": { "role": "neutral", "displayName": "Graphite Low", "canonical": "#15171A" },
+      "graphite-high": { "role": "neutral", "displayName": "Graphite High", "canonical": "#262A30" },
+      "metal-grey": { "role": "neutral", "displayName": "Metal Grey", "canonical": "#9CA3AF" },
+      "metal-grey-soft": { "role": "neutral", "displayName": "Metal Grey Soft", "canonical": "#C9CED6" },
+      "paper": { "role": "neutral", "displayName": "Counter Paper", "canonical": "#F3F4F6" },
+      "field-yellow": { "role": "primary", "displayName": "Field Yellow", "canonical": "#FFD25C" },
+      "yellow-deep": { "role": "primary", "displayName": "Deep Yellow", "canonical": "#E5A400" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero h1 only, two lines at every width." },
+      "headline": { "displayName": "Headline", "purpose": "Every section h2, one size." },
+      "title": { "displayName": "Title", "purpose": "Sheet, card and part titles, uppercase." },
+      "lead": { "displayName": "Lead", "purpose": "The sentence beside each section heading." },
+      "body": { "displayName": "Body", "purpose": "Running text." },
+      "label": { "displayName": "Label", "purpose": "Buttons and tags, uppercase at width 112%." }
+    },
+    "shadows": [
+      { "name": "sheet", "value": "0 -30px 60px -20px rgba(0,0,0,0.7)", "purpose": "Side and bottom sheets." },
+      { "name": "dialog", "value": "0 40px 80px -30px rgba(0,0,0,0.85)", "purpose": "Photo lightbox." },
+      { "name": "menu", "value": "0 20px 40px -12px rgba(0,0,0,0.5)", "purpose": "Search suggestions." }
+    ],
+    "motion": [
+      { "name": "ease-out", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "All entrances and state transitions." },
+      { "name": "entrance", "value": "opacity 0→1, translateY 24px→0, 700ms, stagger 75ms, once", "purpose": "Section parts entering the viewport." },
+      { "name": "hero-assembly", "value": "2.2s ease-out cubic; scroll re-separates up to 85%", "purpose": "The signature WebGL brake assembly." },
+      { "name": "curtain", "value": "sticky footer under main", "purpose": "The page lifts away to uncover the footer." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one action of a region: explore, quote, send.",
+      "html": "<button class=\"ds-btn-primary\">Explorar productos <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M5 12h14M12 5l7 7-7 7\"/></svg></button>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;gap:10px;height:56px;padding:0 28px;border:0;border-radius:2px;background:#FFB900;color:#08090B;font-family:'Archivo Variable',Archivo,sans-serif;font-weight:750;font-stretch:112%;font-size:15px;text-transform:uppercase;letter-spacing:.02em;cursor:pointer;transition:background-color .2s,transform .2s}.ds-btn-primary:hover{background:#fff}.ds-btn-primary:hover svg{transform:translateX(4px)}.ds-btn-primary svg{transition:transform .3s}.ds-btn-primary:focus-visible{outline:3px solid #FFB900;outline-offset:3px}.ds-btn-primary:active{transform:translateY(1px) scale(.985)}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Second action on black.",
+      "html": "<button class=\"ds-btn-secondary\">Solicitar cotización</button>",
+      "css": ".ds-btn-secondary{height:56px;padding:0 28px;border:0;border-radius:2px;background:#262A30;color:#fff;font-family:'Archivo Variable',Archivo,sans-serif;font-weight:750;font-stretch:112%;font-size:15px;text-transform:uppercase;letter-spacing:.02em;cursor:pointer;transition:background-color .2s}.ds-btn-secondary:hover{background:#33383f}.ds-btn-secondary:focus-visible{outline:3px solid #FFB900;outline-offset:3px}"
+    },
+    {
+      "name": "Filter Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Toggle filters in the part finder.",
+      "html": "<button class=\"ds-chip\" aria-pressed=\"false\">Tornillería</button><button class=\"ds-chip\" aria-pressed=\"true\">Frenos de aire</button>",
+      "css": ".ds-chip{height:40px;padding:0 14px;margin:0 6px 6px 0;border:0;border-radius:2px;background:#262A30;color:#fff;font-family:'Archivo Variable',Archivo,sans-serif;font-weight:600;font-size:16px;cursor:pointer;transition:background-color .2s}.ds-chip:hover{background:#33383f}.ds-chip[aria-pressed=true]{background:#FFB900;color:#08090B}.ds-chip:focus-visible{outline:3px solid #FFB900;outline-offset:3px}"
+    },
+    {
+      "name": "Search Field",
+      "kind": "input",
+      "refersTo": "input-search",
+      "description": "The part finder's black search bar on the yellow field.",
+      "html": "<label class=\"ds-search\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#FFB900\" stroke-width=\"2\"><circle cx=\"11\" cy=\"11\" r=\"7\"/><path d=\"m21 21-4.3-4.3\"/></svg><input placeholder=\"Ej.: válvula relevadora\"></label>",
+      "css": ".ds-search{display:flex;align-items:center;gap:12px;height:64px;padding:0 16px;background:#08090B}.ds-search:focus-within{outline:3px solid #08090B;outline-offset:3px}.ds-search input{flex:1;min-width:0;background:transparent;border:0;color:#fff;font:500 18px 'Archivo Variable',Archivo,sans-serif;caret-color:#FFB900}.ds-search input::placeholder{color:#9CA3AF}.ds-search input:focus{outline:none}"
+    },
+    {
+      "name": "Coupon Field",
+      "kind": "input",
+      "refersTo": "input-on-yellow",
+      "description": "Form inputs on the yellow quote coupon.",
+      "html": "<div class=\"ds-field-wrap\"><label class=\"ds-label\" for=\"ds-n\">Nombre *</label><input id=\"ds-n\" class=\"ds-field\"></div>",
+      "css": ".ds-field-wrap{background:#FFB900;padding:20px}.ds-label{display:block;margin-bottom:6px;font:700 16px 'Archivo Variable',Archivo,sans-serif;color:#08090B}.ds-field{display:block;width:100%;height:52px;padding:0 16px;border:0;border-radius:2px;background:#FFD25C;color:#08090B;font:500 17px 'Archivo Variable',Archivo,sans-serif}.ds-field:focus{background:#fff;outline:3px solid #08090B}"
+    },
+    {
+      "name": "Navigation Bar",
+      "kind": "nav",
+      "refersTo": "nav",
+      "description": "Fixed bar: wordmark, plain links, one yellow action.",
+      "html": "<nav class=\"ds-nav\"><strong class=\"ds-nav-mark\">TORNIRACORES 2</strong><a class=\"ds-nav-link is-active\" href=\"#\">Inicio</a><a class=\"ds-nav-link\" href=\"#\">Productos</a><a class=\"ds-nav-link\" href=\"#\">Contacto</a><button class=\"ds-nav-cta\">Cotizar ahora</button></nav>",
+      "css": ".ds-nav{display:flex;align-items:center;gap:6px;height:72px;padding:0 24px;background:rgba(8,9,11,.88);font-family:'Archivo Variable',Archivo,sans-serif}.ds-nav-mark{margin-right:auto;color:#FFB900;font-style:italic;font-weight:850;font-stretch:115%}.ds-nav-link{position:relative;padding:8px 12px;color:#C9CED6;font-weight:600;font-size:15px;text-decoration:none}.ds-nav-link:hover,.ds-nav-link.is-active{color:#fff}.ds-nav-link.is-active::after{content:'';position:absolute;left:12px;right:12px;bottom:-2px;height:3px;background:#FFB900}.ds-nav-cta{margin-left:16px;height:44px;padding:0 20px;border:0;border-radius:2px;background:#FFB900;color:#08090B;font-weight:800;font-stretch:115%;font-size:13px;text-transform:uppercase;cursor:pointer}.ds-nav-cta:hover{background:#fff}"
+    },
+    {
+      "name": "Façade Pillar",
+      "kind": "custom",
+      "refersTo": "pillar",
+      "description": "Family index styled after the store's painted pillars.",
+      "html": "<a class=\"ds-pillar\" href=\"#\"><span class=\"ds-pillar-panel\"><span class=\"ds-pillar-label\">Tornillería</span></span><span class=\"ds-pillar-foot\">Ver</span></a>",
+      "css": ".ds-pillar{display:inline-flex;flex-direction:column;align-items:center;width:84px;height:300px;padding:10px 10px 12px;background:#FFB900;text-decoration:none;transition:transform .5s cubic-bezier(.16,1,.3,1),background-color .5s}.ds-pillar:hover{transform:translateY(-8px);background:#fff}.ds-pillar-panel{flex:1;width:100%;display:flex;align-items:center;justify-content:center;background:#08090B}.ds-pillar-label{writing-mode:vertical-rl;transform:rotate(180deg);color:#fff;font:800 16px 'Archivo Variable',Archivo,sans-serif;letter-spacing:.06em;text-transform:uppercase}.ds-pillar-foot{margin-top:8px;font:700 14px 'Archivo Variable',Archivo,sans-serif;color:#08090B}"
+    },
+    {
+      "name": "Spec Sheet Row",
+      "kind": "custom",
+      "refersTo": "spec-sheet",
+      "description": "Printed price-list row with a dot leader.",
+      "html": "<dl class=\"ds-sheet\"><div class=\"ds-row\"><dt>Referencia</dt><span class=\"ds-leader\"></span><dd>DEMO-TOR-001</dd></div><div class=\"ds-row\"><dt>Precio</dt><span class=\"ds-leader\"></span><dd class=\"ds-muted\">Bajo cotización</dd></div></dl>",
+      "css": ".ds-sheet{margin:0;padding:24px 20px;background:#F3F4F6;color:#08090B;font-family:'Archivo Variable',Archivo,sans-serif}.ds-row{display:flex;align-items:baseline;padding:9px 0}.ds-row dt{font-weight:600;font-size:16px}.ds-row dd{margin:0;font-weight:600;font-size:16px;font-variant-numeric:tabular-nums}.ds-leader{flex:1;min-width:2.5rem;margin:0 8px;transform:translateY(-.3em);border-bottom:4px dotted currentColor;opacity:.45}.ds-muted{color:#4B5058;font-weight:400}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Storefront Counter",
+    "overview": "The site is the store's own corner building and the paperwork that crosses its counter. The façade gives the page its world: black ground, whole panels of industrial yellow, black bands, and pillars with the product families painted vertically. The counter gives it its artefacts: a spec sheet set like a printed price list, a quote coupon with notches and a perforation, and an order slip with a torn zigzag edge. Real metal (a WebGL brake corner, open-licence part photographs) carries the product. Nothing is decorated for its own sake.\n\nDensity is commercial, not editorial: every section has full content and a way to ask for a price. Colour commits at field scale. Yellow owns whole regions (the part finder, the coupon, the information plate on the store photo, the pillars) rather than being sprinkled as accents. Depth comes from tone steps between black and graphite, never from lines.",
+    "keyCharacteristics": [
+      "Black ground, yellow fields, white lettering, graphite tone steps.",
+      "One typeface, Archivo variable: heavy, uppercase, upright for headings; regular for text.",
+      "Square-cut flat controls (2px), no outlined boxes, no resting shadows.",
+      "Printed counter artefacts: dot leaders, zigzag cuts, coupon notches.",
+      "Honest labelling of demo data and reference photos, set in the same voice as everything else."
+    ],
+    "rules": [
+      { "name": "The Field, Not Fleck Rule", "body": "Yellow appears as whole fields or as the one action in a region. Never as scattered accent words, underlines or icon tints on black text.", "section": "colors" },
+      { "name": "The Façade Rule", "body": "Black and yellow alternate like the building: a yellow field is followed by black or graphite, never by another yellow field.", "section": "colors" },
+      { "name": "The Two-Line Rule", "body": "Every heading fits on two lines at 1440, 768 and 390px. Cut words, widen the column, then lower the size. Never condense the face below 84%.", "section": "typography" },
+      { "name": "The One Colour Heading Rule", "body": "Headings are one colour. No yellow accent words inside a headline.", "section": "typography" },
+      { "name": "The Float-Only Shadow Rule", "body": "If it does not sit above the page in a layer of its own, it has no shadow. Separation comes from a tone step.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do commit yellow as whole fields (#FFB900) and keep black text on it.",
+      "Do keep every heading to two lines at 1440, 768 and 390px.",
+      "Do separate surfaces with the graphite steps (#15171A / #1C1F23 / #262A30).",
+      "Do label demo data and reference photos plainly (\"Catálogo de demostración\", \"Imagen de referencia\").",
+      "Do give every control hover, focus-visible (3px yellow outline) and pressed states.",
+      "Do keep the hero's one authored moment, the brake assembly, and keep other motion to short, staggered entrances that respect reduced motion."
+    ],
+    "donts": [
+      "Don't redraw, recolour or regenerate the logo. Use the supplied artwork only.",
+      "Don't alter the façade photograph.",
+      "Don't add gradients as fills, glows or resting shadows. The spotlight cone in the hero is a brief-mandated exception.",
+      "Don't use outlined 1px boxes or hairline dividers.",
+      "Don't add eyebrow labels above headings or index numbers (01 / 02).",
+      "Don't colour single words inside a headline.",
+      "Don't show prices, stock or vehicle compatibility unless the store supplied them."
+    ]
+  }
+}

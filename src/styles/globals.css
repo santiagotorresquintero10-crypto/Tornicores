@@ -1,0 +1,277 @@
+@import "@fontsource-variable/archivo/wdth.css";
+@import "@fontsource-variable/archivo/wdth-italic.css";
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ── Brand tokens ─────────────────────────────────────────────────────────
+ * Taken from the façade and the logo: black ground, industrial yellow
+ * panels, white lettering, graphite surfaces, metallic grey details. */
+:root {
+  --ink: #08090b;
+  --yellow: #ffb900;
+  --yellow-deep: #e5a400;
+  --white: #ffffff;
+  --graphite: #1c1f23;
+  --graphite-2: #15171a;
+  --graphite-3: #262a30;
+  --steel: #9ca3af;
+  --steel-soft: #c9ced6;
+
+  /* shadcn roles mapped onto the brand */
+  --background: var(--ink);
+  --foreground: var(--white);
+  --card: var(--graphite);
+  --card-foreground: var(--white);
+  --popover: var(--graphite);
+  --popover-foreground: var(--white);
+  --primary: var(--yellow);
+  --primary-foreground: var(--ink);
+  --secondary: var(--graphite-3);
+  --secondary-foreground: var(--white);
+  --muted: var(--graphite-3);
+  --muted-foreground: var(--steel);
+  --accent: var(--yellow);
+  --accent-foreground: var(--ink);
+  --border: #2c3037;
+  --input: #2c3037;
+  --ring: var(--yellow);
+  --radius: 0.25rem;
+
+  /* 3d-folder palette */
+  --folder-back: #e5a400;
+  --folder-tab: #cc9200;
+  --folder-front: #ffb900;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --gutter: clamp(1rem, 0.6rem + 1.8vw, 2.5rem);
+  --nav-h: 4.5rem;
+
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-ink: var(--ink);
+  --color-yellow: var(--yellow);
+  --color-yellow-deep: var(--yellow-deep);
+  --color-graphite: var(--graphite);
+  --color-graphite-2: var(--graphite-2);
+  --color-graphite-3: var(--graphite-3);
+  --color-steel: var(--steel);
+  --color-steel-soft: var(--steel-soft);
+
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+  --radius-xl: calc(var(--radius) + 6px);
+
+  --font-sans: "Archivo Variable", "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Archivo Variable", "Archivo", ui-sans-serif, system-ui, sans-serif;
+
+  --animate-spotlight: spotlight 2s ease 0.75s 1 forwards;
+  @keyframes spotlight {
+    0% {
+      opacity: 0;
+      transform: translate(-72%, -62%) scale(0.5);
+    }
+    100% {
+      opacity: 1;
+      transform: translate(-50%, -40%) scale(1);
+    }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: var(--nav-h);
+    -webkit-text-size-adjust: 100%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    font-variation-settings: normal;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: var(--yellow);
+    color: var(--ink);
+  }
+  :focus-visible {
+    outline: 3px solid var(--yellow);
+    outline-offset: 3px;
+  }
+  input,
+  textarea,
+  select {
+    caret-color: var(--yellow);
+  }
+  a {
+    text-underline-offset: 0.22em;
+    text-decoration-thickness: 2px;
+  }
+  /* Scrollbars painted from the palette */
+  html {
+    scrollbar-color: #3a3f47 var(--ink);
+  }
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--ink);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #3a3f47;
+    border: 3px solid var(--ink);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--yellow);
+  }
+}
+
+@layer components {
+  /* Display voice: Archivo pushed wide and heavy, upright or leaning like the logo. */
+  .display {
+    font-family: var(--font-display);
+    font-stretch: 84%;
+    font-weight: 850;
+    letter-spacing: -0.025em;
+    line-height: 0.92;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+  @media (min-width: 40rem) {
+    .display {
+      font-stretch: 100%;
+    }
+  }
+  /* One size for every section heading. */
+  .h2 {
+    font-size: clamp(1.875rem, 1rem + 3.9vw, 4.75rem);
+  }
+  .display-italic {
+    font-style: italic;
+  }
+  .wide {
+    font-stretch: 112%;
+  }
+  .condensed {
+    font-stretch: 72%;
+  }
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  .frame {
+    padding-inline: var(--gutter);
+  }
+  .frame-max {
+    width: 100%;
+    max-width: 92rem;
+    margin-inline: auto;
+  }
+
+  /* The façade's pillar: yellow face, black inset with the family painted vertically. */
+  .pillar-label {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-stretch: 100%;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* Dot leader for spec sheets and the order slip. */
+  .leader {
+    flex: 1;
+    min-width: 2.5rem;
+    margin-inline: 0.5rem;
+    transform: translateY(-0.3em);
+    border-bottom: 4px dotted currentColor;
+    opacity: 0.45;
+  }
+
+  /* Bottom zigzag cut of the order slip. */
+  .zigzag-bottom {
+    --z: 14px;
+    -webkit-mask:
+      conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / calc(2 * var(--z)) 100%; /* taste-skill-ignore: cut edge, not a fill */
+    mask:
+      conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / calc(2 * var(--z)) 100%; /* taste-skill-ignore: cut edge, not a fill */
+    padding-bottom: calc(var(--z) + 1.25rem);
+  }
+
+  /* Coupon: two semicircle notches where the perforation runs (desktop). */
+  @media (min-width: 64rem) {
+    .coupon-notches {
+      --n: radial-gradient(circle 18px at 34.7% 0, #0000 97%, #000) top / 100% 51% no-repeat, radial-gradient(circle 18px at 34.7% 100%, #0000 97%, #000) bottom / 100% 51% no-repeat; /* taste-skill-ignore: cut edge, not a fill */
+      -webkit-mask: var(--n);
+      mask: var(--n);
+    }
+  }
+
+  .sr-only-focusable:not(:focus):not(:focus-within) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}
+
+/* Hero loader used by SplineScene's Suspense fallback */
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--graphite-3);
+  border-top-color: var(--yellow);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes scroll-cue {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(220%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .loader {
+    animation-duration: 3s;
+  }
+}

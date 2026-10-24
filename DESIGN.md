@@ -225,8 +225,8 @@ Flat, loud and square.
 ### Navigation
 Fixed bar: transparent over the hero, Shop Black at 88% with a light blur once scrolled. The original logo sits on the left, plain links in the middle (active link white with a 3px yellow underline that wipes in), and "Cotizar ahora" as the yellow action on the right. On phones a full-screen black menu wipes down with heavy uppercase links and a full-width yellow action.
 
-### Façade Pillars (signature)
-A yellow column with a black inset panel and the family name painted vertically, bottom to top, and "Ver" at the foot. On hover or focus it rises 8px and the yellow turns white.
+### Product Card
+Graphite card with the photo on a light plate (4:3), meta line (reference · brand) in Metal Grey, uppercase title, one line of use, then "Precio bajo cotización" unless a real price exists, and a footer with "Cotizar" (yellow) and "Ficha" (graphite). Lifts 5px on hover; the photo scales to 1.05. Shown in a 4 / 2 / 1-column grid on the yellow finder field.
 
 ### Printed Artefacts (signature)
 The spec sheet and the order slip are Paper (#F3F4F6) with a zigzag bottom. Rows read label, then a 4px dotted leader at 45% opacity (min 2.5rem), then the value. The final line of the slip is an inverted black bar. The coupon is a yellow card with notches and a dotted perforation.

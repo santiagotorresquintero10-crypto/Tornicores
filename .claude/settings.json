@@ -43,7 +43,8 @@
       "PowerShell(npm run build 2>&1 | Select-String -Pattern 'error|built'; $s=\"C:\\\\Users\\\\santi\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-santi-OneDrive-Desktop-Torniracores\\\\11da7c38-b7ff-45ea-9336-3cf0c2c6ccbd\\\\scratchpad\"; '[{\"name\":\"btn\",\"eval\":\"document.documentElement.style.scrollBehavior=''auto''; document.querySelector\\(''#cat-repuestos''\\).scrollIntoView\\({block:''center''}\\)\",\"wait\":1500}]' | Out-File -Encoding ascii \"$s\\\\btn.json\"; node \"$s\\\\snap.mjs\" http://localhost:4173/ \"$s\\\\btn\" 1440 900 \"$s\\\\btn.json\" 2>&1 | Select-String -NotMatch 'X4122|^shot'; node .agents/skills/design-taste-frontend/scripts/inspect.mjs http://localhost:4173/ 2>&1 | Select-String -Pattern 'RESULT'; node .agents/skills/design-taste-frontend/scripts/lint.mjs src 2>&1 | Select-String -Pattern 'RESULT'; & \"C:\\\\Users\\\\santi\\\\.claude\\\\skills\\\\impeccable\\\\scripts\\\\impeccable.cmd\" detect --json src)",
       "PowerShell(npm run typecheck 2>&1 | Select-Object -Last 5; \"typecheck exit: $LASTEXITCODE\")",
       "Bash(npx --no-install impeccable concept-seed --check-seed seed:88b5b88148e4415f)",
-      "Bash(echo \"exit=$?\")"
+      "Bash(echo \"exit=$?\")",
+      "PowerShell(Remove-Item src/components/sections/featured-products.tsx; Select-String -Path src -Recurse -Pattern 'featured-products|scrollToId\\\\\\(\"productos\"\\\\\\)|scrollToId\\\\\\(\"categorias\"\\\\\\)' -List | ForEach-Object { \"$\\($_.Path\\):$\\($_.LineNumber\\)\" })"
     ]
   }
 }

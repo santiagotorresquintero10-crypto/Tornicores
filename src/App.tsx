@@ -4,7 +4,6 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Hero } from "@/components/sections/hero";
 import { Categories } from "@/components/sections/categories";
-import { FeaturedProducts } from "@/components/sections/featured-products";
 import { PartFinder } from "@/components/sections/part-finder";
 import { MechanicsUniverse } from "@/components/sections/mechanics-universe";
 import { Brands } from "@/components/sections/brands";
@@ -20,7 +19,6 @@ export default function App() {
         <main id="contenido" className="relative z-10 bg-ink">
           <Hero />
           <Categories />
-          <FeaturedProducts />
           <PartFinder />
           <MechanicsUniverse />
           <Brands />

@@ -1,8 +1,9 @@
 import * as React from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, MessageSquareText, Search, X } from "lucide-react";
+import { motion, type Variants } from "framer-motion";
+import { Info, MessageSquareText, Search, X } from "lucide-react";
 import { Reveal, RevealItem } from "@/components/layout/reveal";
-import { ProductSheet, SpecRow } from "@/components/products/product-sheet";
+import { ProductSheet } from "@/components/products/product-sheet";
+import { ProductCard } from "@/components/ui/product-card-2";
 import { Button } from "@/components/ui/button";
 import { BRANDS, brandById } from "@/data/brands";
 import { CATEGORIES, categoryById, type CategoryId } from "@/data/categories";
@@ -15,76 +16,39 @@ import { productEnquiry } from "@/lib/whatsapp";
 
 const provider: SearchProvider = localSearch;
 const EXAMPLES = ["válvula relevadora", "perno banjo", "DEMO-HID-001", "amortiguador"];
+const PAGE = 8;
 
-function Chip({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
-  return (
-    <button
-      type="button"
-      aria-pressed={active}
-      onClick={onClick}
-      className={cn(
-        "h-10 rounded-[2px] px-3.5 text-[1rem] font-semibold transition-colors",
-        active ? "bg-yellow text-ink" : "bg-graphite-3 text-white hover:bg-[#33383f]",
-      )}
-    >
-      {children}
-    </button>
-  );
-}
+const grid: Variants = { hidden: {}, visible: { transition: { staggerChildren: 0.06 } } };
+const item: Variants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 120, damping: 16 } },
+};
 
-function ResultRow({ product, open, onToggle, onSheet }: { product: Product; open: boolean; onToggle: () => void; onSheet: () => void }) {
-  const { requestQuote } = useSiteActions();
-  const panelId = React.useId();
+const selectBase =
+  "h-14 w-full appearance-none rounded-[2px] bg-ink bg-no-repeat pl-4 pr-10 text-[1rem] font-semibold text-white [background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23ffb900' stroke-width='2.5'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E\")] [background-position:right_14px_center]";
+
+function FilterSelect({
+  id,
+  label,
+  value,
+  onChange,
+  children,
+}: {
+  id: string;
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  children: React.ReactNode;
+}) {
   return (
-    <li className="bg-graphite">
-      <h3>
-        <button
-          type="button"
-          aria-expanded={open}
-          aria-controls={panelId}
-          onClick={onToggle}
-          className="flex min-h-16 w-full items-center gap-4 px-4 py-3 text-left transition-colors hover:bg-graphite-3 md:px-5"
-        >
-          <img src={photoSquare(product.photo)} alt="" loading="lazy" className="h-11 w-11 shrink-0 object-cover" />
-          <span className="min-w-0 flex-1">
-            <span className="block truncate text-[1.0625rem] font-[750]">{product.name}</span>
-            <span className="tabular block truncate text-[0.875rem] text-steel">
-              {product.ref} · {categoryById(product.category).name}
-            </span>
-          </span>
-          <ChevronDown className={cn("h-5 w-5 shrink-0 text-yellow transition-transform duration-300", open && "rotate-180")} aria-hidden />
-        </button>
-      </h3>
-      <AnimatePresence initial={false}>
-        {open ? (
-          <motion.div
-            id={panelId}
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="overflow-hidden"
-          >
-            <div className="px-4 pb-5 md:px-5">
-              <dl className="text-white [&_.leader]:opacity-30 [&_dd]:text-steel-soft">
-                <SpecRow label="Marca" value={brandById(product.brandId)?.name ?? "—"} />
-                <SpecRow label="Uso típico" value={product.use} />
-                <SpecRow label="Se usa en" value={product.vehicles.join(", ")} />
-              </dl>
-              <div className="mt-4 flex flex-wrap gap-2">
-                <Button size="sm" onClick={() => requestQuote(productEnquiry(product.name, product.ref))}>
-                  <MessageSquareText aria-hidden />
-                  Cotizar
-                </Button>
-                <Button size="sm" variant="secondary" onClick={onSheet}>
-                  Ver ficha
-                </Button>
-              </div>
-            </div>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
-    </li>
+    <div className="min-w-0">
+      <label htmlFor={id} className="sr-only">
+        {label}
+      </label>
+      <select id={id} value={value} onChange={(e) => onChange(e.target.value)} className={selectBase}>
+        {children}
+      </select>
+    </div>
   );
 }
 
@@ -94,7 +58,6 @@ export function PartFinder() {
   const [category, setCategory] = React.useState<CategoryId | null>(null);
   const [vehicle, setVehicle] = React.useState<VehicleType | null>(null);
   const [brandId, setBrandId] = React.useState<string | null>(null);
-  const [openRow, setOpenRow] = React.useState<string | null>(null);
   const [sheet, setSheet] = React.useState<Product | null>(null);
   const [showAll, setShowAll] = React.useState(false);
 
@@ -112,7 +75,6 @@ export function PartFinder() {
     setBrandId(finder.brandId ?? null);
     setVehicle(null);
     setShowAll(false);
-    setOpenRow(null);
   }, [finder]);
 
   const suggestions = React.useMemo(() => provider.suggest(query, PRODUCTS), [query]);
@@ -121,7 +83,7 @@ export function PartFinder() {
     [query, category, vehicle, brandId],
   );
   const filtered = !!(query.trim() || category || vehicle || brandId);
-  const visible = showAll ? hits : hits.slice(0, 8);
+  const visible = showAll ? hits : hits.slice(0, PAGE);
 
   const choose = (s: string) => {
     setQuery(s);
@@ -157,9 +119,9 @@ export function PartFinder() {
   };
 
   return (
-    <section id="buscador" aria-labelledby="buscador-title" className="bg-yellow py-24 text-ink md:py-32">
-      <div className="frame frame-max grid grid-cols-[minmax(0,1fr)] gap-12 lg:grid-cols-12 lg:gap-10 [&>*]:min-w-0">
-        <Reveal className="grid gap-6 lg:grid-cols-12 lg:items-end lg:col-span-12">
+    <section id="productos" aria-labelledby="buscador-title" className="bg-yellow py-24 text-ink md:py-32">
+      <div id="buscador" className="frame frame-max scroll-mt-24">
+        <Reveal className="grid gap-6 lg:grid-cols-12 lg:items-end">
           <RevealItem className="lg:col-span-8">
             <h2 id="buscador-title" className="display h2">
               Encuentra la pieza que necesitas.
@@ -167,15 +129,16 @@ export function PartFinder() {
           </RevealItem>
           <RevealItem className="lg:col-span-4">
             <p className="max-w-[42ch] text-[1.125rem] leading-[1.55]">
-              Escribe el nombre, la referencia, la marca o para qué sirve. Filtra por familia y tipo de vehículo.
+              Escribe el nombre, la referencia, la marca o para qué sirve, y filtra si lo necesitas.
             </p>
           </RevealItem>
         </Reveal>
 
-        <div className="lg:col-span-5">
+        {/* One bar: search + three filters */}
+        <div className="mt-10 grid grid-cols-1 gap-2 sm:grid-cols-3 lg:grid-cols-[minmax(0,2.2fr)_repeat(3,minmax(0,1fr))]">
           <form
             role="search"
-            className="relative"
+            className="relative sm:col-span-3 lg:col-span-1"
             onSubmit={(e) => {
               e.preventDefault();
               setListOpen(false);
@@ -184,7 +147,7 @@ export function PartFinder() {
             <label htmlFor="buscar" className="sr-only">
               Buscar repuesto
             </label>
-            <div className="flex h-16 items-center gap-3 bg-ink px-4 text-white focus-within:outline focus-within:outline-[3px] focus-within:outline-offset-[3px] focus-within:outline-ink">
+            <div className="flex h-14 items-center gap-3 bg-ink px-4 text-white focus-within:outline focus-within:outline-[3px] focus-within:outline-offset-[3px] focus-within:outline-ink">
               <Search className="h-6 w-6 shrink-0 text-yellow" aria-hidden />
               <input
                 ref={inputRef}
@@ -210,13 +173,23 @@ export function PartFinder() {
                 className="h-full min-w-0 flex-1 bg-transparent text-[1.125rem] font-medium placeholder:text-steel focus:outline-none [&::-webkit-search-cancel-button]:hidden"
               />
               {query ? (
-                <button type="button" onClick={() => setQuery("")} aria-label="Borrar búsqueda" className="flex h-10 w-10 items-center justify-center text-steel hover:text-white">
+                <button
+                  type="button"
+                  onClick={() => setQuery("")}
+                  aria-label="Borrar búsqueda"
+                  className="flex h-10 w-10 items-center justify-center text-steel hover:text-white"
+                >
                   <X className="h-5 w-5" />
                 </button>
               ) : null}
             </div>
             {listOpen && suggestions.length > 0 ? (
-              <ul id={listId} role="listbox" aria-label="Sugerencias" className="absolute inset-x-0 top-full z-20 mt-1 bg-ink py-1 text-white shadow-[0_20px_40px_-12px_rgba(0,0,0,0.5)]" /* taste-skill-ignore */>
+              <ul
+                id={listId}
+                role="listbox"
+                aria-label="Sugerencias"
+                className="absolute inset-x-0 top-full z-20 mt-1 bg-ink py-1 text-white shadow-[0_20px_40px_-12px_rgba(0,0,0,0.5)]" /* taste-skill-ignore */
+              >
                 {suggestions.map((s, i) => (
                   <li
                     key={s}
@@ -236,8 +209,64 @@ export function PartFinder() {
             ) : null}
           </form>
 
-          {!query ? (
-            <div className="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-[1rem]">
+          <FilterSelect
+            id="f-familia"
+            label="Familia"
+            value={category ?? ""}
+            onChange={(v) => {
+              setCategory((v || null) as CategoryId | null);
+              setShowAll(false);
+            }}
+          >
+            <option value="">Todas las familias</option>
+            {CATEGORIES.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+          </FilterSelect>
+          <FilterSelect
+            id="f-vehiculo"
+            label="Tipo de vehículo"
+            value={vehicle ?? ""}
+            onChange={(v) => {
+              setVehicle((v || null) as VehicleType | null);
+              setShowAll(false);
+            }}
+          >
+            <option value="">Todo tipo de vehículo</option>
+            {VEHICLE_TYPES.map((v) => (
+              <option key={v} value={v}>
+                {v}
+              </option>
+            ))}
+          </FilterSelect>
+          <FilterSelect
+            id="f-marca"
+            label="Marca"
+            value={brandId ?? ""}
+            onChange={(v) => {
+              setBrandId(v || null);
+              setShowAll(false);
+            }}
+          >
+            <option value="">Todas las marcas</option>
+            {BRANDS.map((b) => (
+              <option key={b.id} value={b.id}>
+                {b.name}
+              </option>
+            ))}
+          </FilterSelect>
+        </div>
+
+        {/* Status line */}
+        <div className="mt-5 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2" aria-live="polite">
+          {filtered ? (
+            <p className="text-[1.0625rem] font-bold">
+              {hits.length} {hits.length === 1 ? "resultado" : "resultados"}
+            </p>
+          ) : (
+            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-[1rem]">
               <span>Prueba:</span>
               {EXAMPLES.map((ex) => (
                 <button
@@ -250,52 +279,11 @@ export function PartFinder() {
                 </button>
               ))}
             </div>
-          ) : null}
-
-          <fieldset className="mt-9">
-            <legend className="text-[1rem] font-bold">Familia</legend>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {CATEGORIES.map((c) => (
-                <Chip key={c.id} active={category === c.id} onClick={() => setCategory((v) => (v === c.id ? null : c.id))}>
-                  {c.name}
-                </Chip>
-              ))}
-            </div>
-          </fieldset>
-          <fieldset className="mt-6">
-            <legend className="text-[1rem] font-bold">Tipo de vehículo</legend>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {VEHICLE_TYPES.map((v) => (
-                <Chip key={v} active={vehicle === v} onClick={() => setVehicle((x) => (x === v ? null : v))}>
-                  {v}
-                </Chip>
-              ))}
-            </div>
-          </fieldset>
-          <div className="mt-6">
-            <label htmlFor="marca" className="text-[1rem] font-bold">
-              Marca
-            </label>
-            <select
-              id="marca"
-              value={brandId ?? ""}
-              onChange={(e) => setBrandId(e.target.value || null)}
-              className="mt-3 block h-12 w-full max-w-xs rounded-[2px] bg-ink px-3 text-[1.0625rem] font-medium text-white"
-            >
-              <option value="">Todas las marcas</option>
-              {BRANDS.map((b) => (
-                <option key={b.id} value={b.id}>
-                  {b.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        <div className="lg:col-span-7" aria-live="polite">
-          <div className="flex items-baseline justify-between gap-4 border-b-0 pb-4">
-            <p className="text-[1.0625rem] font-bold">
-              {filtered ? `${hits.length} ${hits.length === 1 ? "resultado" : "resultados"}` : `${PRODUCTS.length} piezas en el catálogo de demostración`}
+          )}
+          <div className="flex items-baseline gap-5">
+            <p className="flex items-center gap-1.5 text-[1rem]">
+              <Info className="h-4 w-4 shrink-0" aria-hidden />
+              Catálogo de demostración ({PRODUCTS.length} piezas)
             </p>
             {filtered ? (
               <button type="button" onClick={reset} className="text-[1rem] font-semibold underline decoration-2 underline-offset-4 hover:no-underline">
@@ -303,42 +291,64 @@ export function PartFinder() {
               </button>
             ) : null}
           </div>
-
-          {hits.length ? (
-            <>
-              <ul className="flex flex-col gap-1.5 text-white">
-                {visible.map((h) => (
-                  <ResultRow
-                    key={h.product.id}
-                    product={h.product}
-                    open={openRow === h.product.id}
-                    onToggle={() => setOpenRow((o) => (o === h.product.id ? null : h.product.id))}
-                    onSheet={() => setSheet(h.product)}
-                  />
-                ))}
-              </ul>
-              {hits.length > visible.length ? (
-                <Button variant="ink" className="mt-4 w-full" onClick={() => setShowAll(true)}>
-                  Ver los {hits.length} resultados
-                </Button>
-              ) : null}
-            </>
-          ) : (
-            <div className="bg-ink p-6 text-white md:p-8">
-              <p className="text-[1.625rem] font-[800] uppercase leading-tight [font-stretch:108%]">
-                No está en el catálogo de demostración.
-              </p>
-              <p className="mt-3 max-w-[48ch] text-[1.0625rem] leading-[1.55] text-steel-soft">
-                Eso no significa que no la tengamos: el inventario real aún no está cargado en la página. Pregúntala
-                directamente y te respondemos por WhatsApp.
-              </p>
-              <Button className="mt-6" onClick={() => requestQuote(query.trim() || (category ? categoryById(category).name : ""))}>
-                <MessageSquareText aria-hidden />
-                Preguntar por “{query.trim() || "esta pieza"}”
-              </Button>
-            </div>
-          )}
         </div>
+
+        {/* Results */}
+        {hits.length ? (
+          <>
+            <motion.ul
+              key={`${query}|${category}|${vehicle}|${brandId}`}
+              className="mt-8 grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 lg:grid-cols-4"
+              variants={grid}
+              initial="hidden"
+              animate="visible"
+            >
+              {visible.map(({ product: p }) => (
+                <motion.li key={p.id} variants={item}>
+                  <ProductCard
+                    imageUrl={photoSquare(p.photo)}
+                    name={p.name}
+                    meta={`${p.ref} · ${brandById(p.brandId)?.name ?? ""}`}
+                    tagline={`${categoryById(p.category).name}. ${p.use}.`}
+                    className="text-white"
+                    footer={
+                      <>
+                        <Button size="sm" className="flex-1" onClick={() => requestQuote(productEnquiry(p.name, p.ref))}>
+                          <MessageSquareText aria-hidden />
+                          Cotizar
+                        </Button>
+                        <Button size="sm" variant="secondary" onClick={() => setSheet(p)} aria-label={`Ver ficha de ${p.name}`}>
+                          Ficha
+                        </Button>
+                      </>
+                    }
+                  />
+                </motion.li>
+              ))}
+            </motion.ul>
+            {hits.length > visible.length ? (
+              <div className="mt-8 flex justify-center">
+                <Button variant="ink" size="lg" onClick={() => setShowAll(true)}>
+                  Ver los {hits.length} productos
+                </Button>
+              </div>
+            ) : null}
+          </>
+        ) : (
+          <div className="mt-8 bg-ink p-6 text-white md:p-10">
+            <p className="text-[1.625rem] font-[800] uppercase leading-tight [font-stretch:108%]">
+              No está en el catálogo de demostración.
+            </p>
+            <p className="mt-3 max-w-[52ch] text-[1.0625rem] leading-[1.55] text-steel-soft">
+              Eso no significa que no la tengamos: el inventario real aún no está cargado en la página. Pregúntala
+              directamente y te respondemos por WhatsApp.
+            </p>
+            <Button className="mt-6" onClick={() => requestQuote(query.trim() || (category ? categoryById(category).name : ""))}>
+              <MessageSquareText aria-hidden />
+              Preguntar por “{query.trim() || "esta pieza"}”
+            </Button>
+          </div>
+        )}
       </div>
       <ProductSheet product={sheet} onClose={() => setSheet(null)} />
     </section>

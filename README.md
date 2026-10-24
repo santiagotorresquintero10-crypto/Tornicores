@@ -52,9 +52,9 @@ El formulario arma el mensaje exacto (visible en la “orden de cotización”) 
 src/
 ├── assets/brand · photos
 ├── components/
-│   ├── ui/        splite, spotlight, card, button, sheet, tilted-grid-hero, 3d-folder
+│   ├── ui/        splite, spotlight, card, button, sheet, tilted-grid-hero, 3d-folder, product-card-2
 │   ├── layout/    navbar, footer, reveal
-│   ├── sections/  hero, categories, featured-products, part-finder, mechanics-universe, brands, headquarters, quote
+│   ├── sections/  hero, categories, part-finder (productos), mechanics-universe (camión y automóvil), brands, headquarters, quote
 │   ├── products/  product-sheet
 │   └── three/     mechanical-scene (WebGL), mechanical-stage
 ├── config/business.ts

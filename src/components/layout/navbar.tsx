@@ -8,8 +8,8 @@ import { useSiteActions } from "@/context/site-actions";
 
 export const NAV_LINKS = [
   { id: "inicio", label: "Inicio" },
-  { id: "productos", label: "Productos" },
   { id: "categorias", label: "Categorías" },
+  { id: "productos", label: "Productos" },
   { id: "marcas", label: "Marcas" },
   { id: "nosotros", label: "Nosotros" },
   { id: "cotizar", label: "Contacto" },
